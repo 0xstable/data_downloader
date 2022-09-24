@@ -1,2 +1,2 @@
 # data_downloader
-Timeseries downloader
+Downloader for timeseries
