@@ -17,7 +17,7 @@ def retrieve_project():
     return project, bucket_name
 
 
-def read_file(coin, project, bucket_name, file_name, size_to_read=256): 
+def read_file(project, bucket_name, file_name, size_to_read=256): 
     download = project.download_object(bucket_name, file_name)
     file_size = download.file_size()
     downloaded_total = 0
@@ -51,7 +51,7 @@ def read_rawdata(ticker_list):
     all_df_raw = {} 
     for coin in ticker_list:  
         file_name = f'{coin.lower()}-usd-max.csv' 
-        all_data = read_file(coin, project, bucket_name, file_name)
+        all_data = read_file(project, bucket_name, file_name)
         df = convert_to_df(all_data)
         all_df_raw.update({coin:df})
     return all_df_raw
