@@ -6,7 +6,7 @@ import pandas as pd
 def retrieve_project():
     cred = generate_credential()
     sat = cred["satellite"]
-    api = cred["api_key":]
+    api = cred["api_key"]
     phrase = cred["passphrase"]
     bucket_name = cred["bucket_name"]
 
@@ -55,3 +55,15 @@ def read_rawdata(ticker_list):
         df = convert_to_df(all_data)
         all_df_raw.update({coin:df})
     return all_df_raw
+
+
+def get_daily_price(ticker_list, all_df_raw):
+    df = pd.DataFrame()
+    for coin in ticker_list: 
+        df_coin = all_df_raw[coin].set_index('snapped_at') 
+        df_coin = df_coin.rename(columns={'price':coin}).dropna()
+        df = pd.concat([df, df_coin[coin]], axis=1) 
+    df.index = pd.to_datetime(df.index)
+    df = df.sort_index()
+    df = df.astype('float')
+    return df
